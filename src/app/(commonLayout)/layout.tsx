@@ -1,4 +1,6 @@
 
+import Footer from "@/components/commonLayouts/Footer";
+import Header from "@/components/commonLayouts/Header";
 import React from "react";
 
 export default function CommonLayout({
@@ -8,7 +10,9 @@ export default function CommonLayout({
 }) {
   return (
     <>
+    <Header />
       {children}
+      <Footer />
     </>
   );
 }
