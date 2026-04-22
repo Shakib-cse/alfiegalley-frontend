@@ -7,11 +7,9 @@ import { Radio, Newspaper } from "lucide-react";
 export default function HeroBanner() {
   return (
     <section className="w-full py-12 md:py-16">
-      <div className="container mx-auto px-4 flex flex-col-reverse md:flex-row items-center justify-between gap-10">
-        
+      <div className="container mx-auto px-4 flex flex-col-reverse md:flex-row items-center justify-center gap-30 max-w-6xl">
         {/* LEFT IMAGES */}
         <div className="flex items-center justify-center gap-4 sm:gap-6 w-full md:w-auto">
-          
           {/* Large Image */}
           <div className="relative w-[140px] h-[260px] sm:w-[180px] sm:h-[340px] lg:w-[220px] lg:h-[420px] rounded-full overflow-hidden">
             <Image
@@ -35,9 +33,9 @@ export default function HeroBanner() {
 
         {/* RIGHT CONTENT */}
         <div className="w-full text-center md:text-left">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
-            Your Sound, Your World.{" "}
-            <span className="text-primary">Live</span> 24/7
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-foreground">
+            Your Sound, Your World. <span className="text-primary">Live</span>{" "}
+            24/7
           </h1>
 
           <p className="mt-4 text-gray-500 text-sm sm:text-base">
@@ -46,7 +44,7 @@ export default function HeroBanner() {
           </p>
 
           {/* STATS */}
-          <div className="flex justify-center md:justify-start gap-6 sm:gap-10 mt-6 sm:mt-8 flex-wrap">
+          <div className="flex justify-center md:justify-between gap-6 sm:gap-10 mt-6 sm:mt-8 flex-wrap">
             <div>
               <h3 className="text-2xl sm:text-3xl font-bold text-primary">
                 30+
@@ -75,12 +73,15 @@ export default function HeroBanner() {
 
           {/* BUTTONS */}
           <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-3 sm:gap-4 mt-6 sm:mt-8">
-            <Button variant="outline" className="gap-2 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              className="gap-2 w-full sm:w-auto px-6 py-5"
+            >
               <Newspaper size={16} />
               Explore News
             </Button>
 
-            <Button className="bg-primary text-white hover:bg-primary/90 gap-2 w-full sm:w-auto">
+            <Button className="bg-primary text-background hover:bg-primary/90 gap-2 w-full sm:w-auto px-6 py-5">
               <Radio size={16} />
               Listen Live Radio
             </Button>

@@ -3,8 +3,7 @@ import { Poppins, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 // Load Poppins font
 const poppins = Poppins({
@@ -24,9 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable)}>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={cn("font-sans", geist.variable)}
+    >
       <body
-        className={`${poppins.variable} font-sans antialiased bg-background text-foreground`}
+        className={`${poppins.variable} font-sans antialiased bg-foreground/5 text-foreground`}
       >
         {children}
       </body>
