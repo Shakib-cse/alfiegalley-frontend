@@ -1,7 +1,12 @@
-import React from 'react'
+import { NewsHeroBanner } from "@/components/newsLayouts/NewsBanner";
+import NewsCard from "@/components/newsLayouts/NewsCard";
+import React from "react";
 
 export default function page() {
   return (
-    <div>page</div>
-  )
+    <main>
+      <NewsHeroBanner />
+      <NewsCard />
+    </main>
+  );
 }

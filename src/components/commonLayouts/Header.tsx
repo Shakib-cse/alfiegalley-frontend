@@ -15,7 +15,7 @@ const Header = () => {
     { name: "Home", path: "/" },
     { name: "News", path: "/news" },
     { name: "About Us", path: "/about" },
-    { name: "Get In Touch", path: "/contact" },
+    { name: "Get In Touch", path: "/get-in-touch" },
   ];
 
   return (
@@ -30,7 +30,10 @@ const Header = () => {
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-6 xl:gap-10">
           {navLinks.map((link) => {
-            const isActive = pathname === link.path;
+            const isActive =
+              link.path === "/"
+                ? pathname === link.path
+                : pathname.startsWith(link.path);
 
             return (
               <Link
@@ -99,7 +102,10 @@ const Header = () => {
         {/* Menu Content */}
         <div className="flex flex-col items-center justify-center h-[calc(100%-64px)] gap-8 px-6">
           {navLinks.map((link) => {
-            const isActive = pathname === link.path;
+            const isActive =
+              link.path === "/"
+                ? pathname === link.path
+                : pathname.startsWith(link.path);
 
             return (
               <Link
