@@ -3,18 +3,20 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React, { useState } from "react";
-import { Menu, X, Radio } from "lucide-react";
+import { Menu, Pause, Play, Radio, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import SvgIcon from "./SvgIcon";
+import { useRadioPlayer } from "./RadioPlayerProvider";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { isPlaying, togglePlayback } = useRadioPlayer();
 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "News", path: "/news" },
-    { name: "About Us", path: "/about" },
+    { name: "About Us", path: "/about-us" },
     { name: "Get In Touch", path: "/get-in-touch" },
   ];
 
@@ -50,7 +52,7 @@ const Header = () => {
 
                 {/* underline */}
                 <span
-                  className={`absolute left-0 -bottom-1 h-[2px] w-full bg-primary transition-all duration-300 ${
+                  className={`absolute left-0 -bottom-1 h-0.5 w-full bg-primary transition-all duration-300 ${
                     isActive ? "opacity-100" : "opacity-0"
                   }`}
                 />
@@ -61,9 +63,16 @@ const Header = () => {
 
         {/* Right Button */}
         <div className="hidden lg:flex">
-          <Button className="bg-primary hover:bg-primary/90 text-background rounded-xl px-5 xl:px-6 py-4 xl:py-5 flex items-center gap-2 text-sm">
-            <Radio className="w-4 h-4" />
-            Listen Radio
+          <Button
+            onClick={togglePlayback}
+            className="bg-primary hover:bg-primary/90 text-background rounded-xl px-5 xl:px-6 py-4 xl:py-5 flex items-center gap-2 text-sm"
+          >
+            {isPlaying ? (
+              <Pause className="w-4 h-4" />
+            ) : (
+              <Play className="w-4 h-4" />
+            )}
+            {isPlaying ? "Pause Radio" : "Listen Radio"}
           </Button>
         </div>
 
@@ -122,9 +131,16 @@ const Header = () => {
           })}
 
           {/* Button */}
-          <Button className="bg-primary text-background rounded-full px-8 py-5 flex items-center gap-2 text-base">
-            <Radio className="w-5 h-5" />
-            Listen Radio
+          <Button
+            onClick={togglePlayback}
+            className="bg-primary text-background rounded-full px-8 py-5 flex items-center gap-2 text-base cursor-pointer"
+          >
+            {isPlaying ? (
+              <Pause className="w-5 h-5" />
+            ) : (
+              <Radio className="w-5 h-5" />
+            )}
+            {isPlaying ? "Pause Radio" : "Listen Radio"}
           </Button>
         </div>
       </div>

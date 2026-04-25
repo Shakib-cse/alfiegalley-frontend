@@ -2,9 +2,13 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Radio, Newspaper } from "lucide-react";
+import { Newspaper, Pause, Play } from "lucide-react";
+import { useRadioPlayer } from "./RadioPlayerProvider";
+import Link from "next/link";
 
 export default function HeroBanner() {
+  const { isPlaying, togglePlayback } = useRadioPlayer();
+
   return (
     <section className="w-full py-12 md:py-16">
       <div className="container mx-auto px-4 flex flex-col-reverse md:flex-row items-center justify-center gap-30 max-w-6xl">
@@ -74,16 +78,22 @@ export default function HeroBanner() {
           {/* BUTTONS */}
           <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-3 sm:gap-4 mt-6 sm:mt-8">
             <Button
+              asChild
               variant="outline"
-              className="gap-2 w-full sm:w-auto px-6 py-5"
+              className="gap-2 w-full sm:w-auto bg-background hover:bg-background/70 px-6 py-5"
             >
-              <Newspaper size={16} />
-              Explore News
+              <Link href="/news">
+                <Newspaper size={16} />
+                Explore News
+              </Link>
             </Button>
 
-            <Button className="bg-primary text-background hover:bg-primary/90 gap-2 w-full sm:w-auto px-6 py-5">
-              <Radio size={16} />
-              Listen Live Radio
+            <Button
+              onClick={togglePlayback}
+              className="bg-primary text-background hover:bg-primary/90 gap-2 w-full sm:w-auto px-6 py-5"
+            >
+              {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+              {isPlaying ? "Pause Live Radio" : "Listen Live Radio"}
             </Button>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import RadioBanner from "@/components/commonLayouts/Banner";
-import LatestEpisodes from "@/components/commonLayouts/LatestEpisodes";
+import HomeNewsPreview from "@/components/commonLayouts/HomeNewsPreview";
 import NewsCategories from "@/components/commonLayouts/NewsCategories";
 import { NewsletterSection } from "@/components/commonLayouts/NewsletterSection";
 import NowPlaying from "@/components/commonLayouts/NowPlaying";
@@ -10,7 +10,7 @@ export default function Home() {
     <main>
       <RadioBanner />
       <NowPlaying />
-      <LatestEpisodes />
+      <HomeNewsPreview />
       <NewsCategories />
       <PodcastBenefits />
       <NewsletterSection />

@@ -2,52 +2,100 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+import { Loader2, Pause, Play, Radio, WifiOff } from "lucide-react";
+import { useMemo } from "react";
+import { useRadioPlayer } from "@/components/commonLayouts/RadioPlayerProvider";
 
 export default function NowPlaying() {
+  const { isPlaying, status, streamUrl, togglePlayback } = useRadioPlayer();
+
+  const waveform = useMemo(
+    () =>
+      Array.from({ length: 48 }, (_, index) => ({
+        key: index,
+        height: `${18 + ((index * 7) % 42)}px`,
+        delay: `${index * 0.045}s`,
+      })),
+    [],
+  );
+
   return (
     <section className="w-full py-16">
       <div className="container mx-auto px-4 text-center">
         {/* TITLE */}
         <h2 className="text-3xl font-semibold mb-8">
-          Now <span className="text-primary">Playing</span>
+          Live <span className="text-primary">Radio</span>
         </h2>
 
         {/* CARD */}
-        <Card className="relative p-6 rounded-2xl bg-background overflow-hidden border-0 ring-0">
-          {/* WAVEFORM BACKGROUND - RIGHT SIDE */}
-          <div className="hidden md:flex absolute right-0 top-0 bottom-0 w-1/2 items-center justify-end gap-[4px] pr-6 pointer-events-none">
-            {Array.from({ length: 60 }).map((_, i) => (
-              <span
-                key={i}
-                className="w-[6px] bg-primary rounded-full animate-pulse"
-                style={{
-                  height: `${Math.random() * 50 + 15}px`,
-                  animationDelay: `${i * 0.05}s`,
-                }}
-              />
-            ))}
-          </div>
+        <Card className="relative overflow-hidden rounded-2xl border-0 bg-background p-6 ring-0">
+          {/* CONTENT */}
+          <div className="relative z-10 flex flex-col gap-5 text-left md:flex-row md:items-center md:gap-6">
+            <div className="flex items-center gap-4 md:flex-1">
+              {/* PLAY BUTTON */}
+              <Button
+                size="icon"
+                onClick={togglePlayback}
+                className="h-14 w-14 rounded-full bg-primary hover:bg-primary/90 shrink-0"
+                aria-label={isPlaying ? "Pause live radio" : "Play live radio"}
+              >
+                {status === "loading" ? (
+                  <Loader2 className="h-6 w-6 animate-spin text-background" />
+                ) : isPlaying ? (
+                  <Pause className="h-6 w-6 fill-background text-background" />
+                ) : (
+                  <Play className="h-6 w-6 fill-background text-background" />
+                )}
+              </Button>
 
-          {/* CONTENT - POSITIONED ON TOP LEFT */}
-          <div className="relative z-10 flex items-center gap-4">
-            {/* PLAY BUTTON */}
-            <Button
-            size="icon"
-              className="rounded-full bg-primary hover:bg-primary/90 flex-shrink-0"
-            >
-              <Play className="text-background fill-background w-6 h-6" />
-            </Button>
+              {/* TEXT */}
+              <div>
+                <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                  <Radio className="h-4 w-4" />
+                  Live Stream
+                </div>
+                <h3 className="text-lg font-semibold">Live365 Radio Stream</h3>
+                <p className="text-sm text-foreground/70">
+                  Streaming live audio for the station audience.
+                </p>
+              </div>
+            </div>
 
-            {/* TEXT */}
-            <div className="text-left">
-              <h3 className="font-semibold text-lg">Life Chill Music</h3>
-              <p className="text-sm text-foreground">
-                Radio streaming by{" "}
-                <span className="font-medium">Alex Kabir</span>
+            <div className="hidden md:flex md:flex-1 items-center justify-center gap-1 overflow-hidden opacity-60">
+              {waveform.map((bar) => (
+                <span
+                  key={bar.key}
+                  className="w-1.5 rounded-full bg-primary animate-pulse"
+                  style={{
+                    height: bar.height,
+                    animationDelay: bar.delay,
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="flex flex-col items-start gap-2 md:min-w-65 md:items-end md:text-right">
+              <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                {isPlaying ? "On Air" : "Tap to listen"}
+              </span>
+
+              <p className="max-w-65 text-xs text-foreground/60">
+                {status === "error"
+                  ? "The stream could not be started. Try again."
+                  : status === "loading"
+                    ? "Connecting to the live stream..."
+                    : `Source: ${streamUrl}`}
               </p>
             </div>
           </div>
+
+          {status === "error" ? (
+            <div className="mt-5 inline-flex items-center gap-2 rounded-xl bg-destructive/10 px-4 py-2 text-sm text-destructive">
+              <WifiOff className="h-4 w-4" />
+              Live audio is temporarily unavailable.
+            </div>
+          ) : null}
         </Card>
       </div>
     </section>
