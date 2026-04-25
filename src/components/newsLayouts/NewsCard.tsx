@@ -11,6 +11,7 @@ import {
   type NewsFeedFilterKey,
   type NewsFeedItem,
 } from "@/lib/news-data";
+import NewsImage from "@/shared/NewsImage";
 
 export default function NewsroomSection() {
   const router = useRouter();
@@ -135,12 +136,7 @@ export default function NewsroomSection() {
                 className="overflow-hidden rounded-2xl border-background bg-background ring-0 p-0 border-0 shadow-sm transition-shadow duration-300"
               >
                 <div className="relative h-72 w-full">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={item.image || "/icons/newsLayout/newsHero.png"}
-                    alt={item.title}
-                    className="h-full w-full object-cover"
-                  />
+                  <NewsImage src={item.image ?? undefined} alt={item.title} />
                 </div>
 
                 <CardContent className="flex h-52 flex-col p-4">
@@ -164,7 +160,7 @@ export default function NewsroomSection() {
                   <Button
                     variant="outline"
                     onClick={() => router.push(`/news/news-details/${item.id}`)}
-                    className="mt-auto h-9 w-full rounded-xl border-foreground/40 bg-background text-sm cursor-pointer font-semibold text-foreground hover:bg-foreground/10"
+                    className="mt-auto h-9 w-full rounded-xl border-foreground/40 bg-background text-sm cursor-pointer font-semibold text-foreground hover:bg-primary hover:text-background hover:border-primary"
                   >
                     View Details
                   </Button>

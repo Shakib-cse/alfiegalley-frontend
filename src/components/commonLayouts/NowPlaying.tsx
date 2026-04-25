@@ -30,7 +30,7 @@ export default function NowPlaying() {
         {/* CARD */}
         <Card className="relative overflow-hidden rounded-2xl border-0 bg-background p-6 ring-0">
           {/* CONTENT */}
-          <div className="relative z-10 flex flex-col gap-5 text-left md:flex-row md:items-center md:gap-6">
+          <div className="relative z-10 grid gap-5 text-left md:grid-cols-3 md:items-center md:gap-6">
             <div className="flex items-center gap-4 md:flex-1">
               {/* PLAY BUTTON */}
               <Button

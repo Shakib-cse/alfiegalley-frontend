@@ -90,7 +90,7 @@ export default function HeroBanner() {
 
             <Button
               onClick={togglePlayback}
-              className="bg-primary text-background hover:bg-primary/90 gap-2 w-full sm:w-auto px-6 py-5"
+              className="bg-primary text-background hover:bg-primary/90 gap-2 w-full sm:w-auto px-6 py-5 cursor-pointer"
             >
               {isPlaying ? <Pause size={16} /> : <Play size={16} />}
               {isPlaying ? "Pause Live Radio" : "Listen Live Radio"}

@@ -3,6 +3,36 @@ import { notFound } from "next/navigation";
 import ReleventNews from "@/components/newsDetails/ReleventNews";
 import { fetchAllNewsFeedItems, getRelatedNewsItems } from "@/lib/news-feed";
 
+const FALLBACK_IMAGE = "/icons/newsLayout/news.jpeg";
+
+function normalizeImageSrc(src?: string) {
+  if (!src) {
+    return FALLBACK_IMAGE;
+  }
+
+  const trimmed = src.trim();
+
+  if (!trimmed) {
+    return FALLBACK_IMAGE;
+  }
+
+  if (trimmed.startsWith("//")) {
+    return `https:${trimmed}`;
+  }
+
+  const normalized = trimmed.replaceAll("&amp;", "&");
+
+  if (
+    normalized.startsWith("http://") ||
+    normalized.startsWith("https://") ||
+    normalized.startsWith("/")
+  ) {
+    return normalized;
+  }
+
+  return FALLBACK_IMAGE;
+}
+
 type NewsDetailsPageProps = {
   params:
     | {
@@ -29,6 +59,8 @@ export default async function NewsDetailsPage({
     .split(/\n{2,}/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean);
+  const imageSrc = normalizeImageSrc(news.image ?? undefined);
+
   return (
     <div className="w-full bg-secondary">
       <div className="container mx-auto px-4 py-12">
@@ -50,9 +82,11 @@ export default async function NewsDetailsPage({
               <div className="relative aspect-video w-full">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={news.image || "/icons/newsLayout/newsHero.png"}
+                  src={imageSrc}
                   alt={news.title}
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                  decoding="async"
                 />
               </div>
             </div>
