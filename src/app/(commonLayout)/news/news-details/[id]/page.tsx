@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import ReleventNews from "@/components/newsDetails/ReleventNews";
-import { fetchAllNewsFeedItems, getRelatedNewsItems } from "@/lib/news-feed";
+import {
+  fetchAllNewsFeedItems,
+  findNewsFeedItemByRouteId,
+  getRelatedNewsItems,
+} from "@/lib/news-feed";
+
+export const dynamic = "force-dynamic";
 
 const FALLBACK_IMAGE = "/icons/newsLayout/news.jpeg";
 
@@ -48,10 +53,32 @@ export default async function NewsDetailsPage({
 }: NewsDetailsPageProps) {
   const resolvedParams = await Promise.resolve(params);
   const items = await fetchAllNewsFeedItems();
-  const news = items.find((item) => item.id === resolvedParams.id);
+  const news = findNewsFeedItemByRouteId(items, resolvedParams.id);
 
   if (!news) {
-    notFound();
+    return (
+      <div className="w-full bg-secondary">
+        <div className="container mx-auto px-4 py-12">
+          <div className="rounded-3xl border border-foreground/10 bg-background p-8 text-center shadow-sm">
+            <h1 className="text-2xl font-bold text-foreground md:text-3xl">
+              This article is currently unavailable
+            </h1>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-foreground/70 md:text-base">
+              The story may have been removed from the live feed or the feed is
+              temporarily unavailable in this environment.
+            </p>
+            <div className="mt-6">
+              <Link
+                href="/news"
+                className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-background transition hover:bg-primary/90"
+              >
+                Back to news
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const relatedNews = getRelatedNewsItems(items, news);

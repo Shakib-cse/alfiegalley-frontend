@@ -17,12 +17,6 @@ const quickLinks = [
   { name: "Get In Touch", href: "/contact" },
 ];
 
-const games = [
-  { name: "All Games", href: "/become-a-teacher" },
-  { name: "Featured", href: "/privacy-policy" },
-  { name: "New Releases", href: "/new_releases" },
-];
-
 const connect = [
   {
     name: "Instagram",
