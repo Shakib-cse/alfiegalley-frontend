@@ -6,7 +6,7 @@ import {
   getRelatedNewsItems,
 } from "@/lib/news-feed";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 const FALLBACK_IMAGE = "/icons/newsLayout/news.jpeg";
 
