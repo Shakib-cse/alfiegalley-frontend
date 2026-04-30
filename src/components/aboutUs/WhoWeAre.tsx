@@ -28,11 +28,12 @@ export default function WhoWeAre() {
 
         {/* RIGHT IMAGE */}
         <div className="w-full">
-          <div className="relative w-full h-[350px] md:h-[400px] rounded-2xl overflow-hidden">
+          <div className="relative w-full h-87.5 md:h-100 rounded-2xl overflow-hidden">
             <Image
               src="/icons/aboutUs/Image.png" // replace with your image
               alt="Who We Are"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
           </div>

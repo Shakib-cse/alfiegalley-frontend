@@ -15,21 +15,24 @@ export default function HeroBanner() {
         {/* LEFT IMAGES */}
         <div className="flex items-center justify-center gap-4 sm:gap-6 w-full md:w-auto">
           {/* Large Image */}
-          <div className="relative w-[140px] h-[260px] sm:w-[180px] sm:h-[340px] lg:w-[220px] lg:h-[420px] rounded-full overflow-hidden">
+          <div className="relative w-35 h-65 sm:w-45 sm:h-85 lg:w-55 lg:h-105 rounded-full overflow-hidden">
             <Image
               src="/icons/commonLayout/banner1.png"
               alt="artist"
               fill
+              sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 220px"
               className="object-cover"
+              priority
             />
           </div>
 
           {/* Small Image */}
-          <div className="relative w-[110px] h-[260px] sm:w-[140px] sm:h-[340px] lg:w-[160px] lg:h-[420px] rounded-full overflow-hidden">
+          <div className="relative w-27.5 h-65 sm:w-35 sm:h-85 lg:w-40 lg:h-105 rounded-full overflow-hidden">
             <Image
               src="/icons/commonLayout/banner2.png"
               alt="artist"
               fill
+              sizes="(max-width: 640px) 110px, (max-width: 1024px) 140px, 160px"
               className="object-cover object-top"
             />
           </div>

@@ -52,7 +52,7 @@ export default function LatestEpisodes() {
                     alt={item.title}
                     width={400}
                     height={250}
-                    className="w-full h-[320px] object-cover"
+                    className="w-full h-80 object-cover"
                   />
 
                   {/* PLAY BUTTON */}

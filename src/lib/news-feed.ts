@@ -21,6 +21,11 @@ const dateFormatter = new Intl.DateTimeFormat("en-GB", {
   year: "numeric",
 });
 
+const FEED_CACHE_TTL_MS = 5 * 60 * 1000;
+
+let cachedFeedItems: NewsFeedItem[] | null = null;
+let cachedFeedItemsExpiresAt = 0;
+
 function toArray<T>(value: T | T[] | undefined | null): T[] {
   if (!value) {
     return [];
@@ -77,6 +82,25 @@ function stripHtml(value: string): string {
 
 function createItemId(categoryKey: NewsFeedCategoryKey, uniqueInput: string) {
   return `${categoryKey}-${createHash("sha1").update(uniqueInput).digest("hex").slice(0, 16)}`;
+}
+
+function buildCandidateIds(item: NewsFeedItem) {
+  const candidates = new Set<string>();
+  const title = item.title || "";
+  const sourceUrl = item.sourceUrl || "";
+  const guid = item.guid || "";
+
+  // Current format
+  candidates.add(item.id);
+
+  // Legacy formats kept for compatibility between dev/prod and old links.
+  candidates.add(createItemId(item.categoryKey, guid || sourceUrl || title));
+  candidates.add(
+    createItemId(item.categoryKey, `${sourceUrl || title}|${guid || title}`),
+  );
+  candidates.add(createItemId(item.categoryKey, guid || title));
+
+  return candidates;
 }
 
 function extractImageUrl(item: Record<string, unknown>, summaryHtml: string) {
@@ -237,11 +261,10 @@ function normalizeNewsMlItem(
     return null;
   }
 
+  const stableIdentifier = itemId || sourceUrl || publicIdentifier || title;
+
   return {
-    id: createItemId(
-      categoryKey,
-      `${sourceUrl || title}|${publicIdentifier || itemId || title}`,
-    ),
+    id: createItemId(categoryKey, stableIdentifier),
     title,
     summary,
     content,
@@ -258,7 +281,7 @@ function normalizeNewsMlItem(
       parsedPublished && !Number.isNaN(parsedPublished.getTime())
         ? dateFormatter.format(parsedPublished)
         : category.label,
-    guid: publicIdentifier || itemId || sourceUrl || title,
+    guid: stableIdentifier,
     feedUrl: category.url,
   };
 }
@@ -290,7 +313,7 @@ function normalizeFeedItem(
   }
 
   return {
-    id: createItemId(categoryKey, `${link || title}|${guid}`),
+    id: createItemId(categoryKey, guid || link || title),
     title,
     summary: summary || title,
     content,
@@ -367,7 +390,7 @@ async function fetchFeedItems(
     .filter((item): item is NewsFeedItem => Boolean(item));
 }
 
-export async function fetchAllNewsFeedItems() {
+async function fetchAllNewsFeedItemsUncached() {
   const results = await Promise.allSettled(
     Object.keys(NEWS_FEEDS).map((categoryKey) =>
       fetchFeedItems(categoryKey as NewsFeedCategoryKey),
@@ -396,9 +419,38 @@ export async function fetchAllNewsFeedItems() {
   });
 }
 
+export async function fetchAllNewsFeedItems() {
+  const now = Date.now();
+
+  if (cachedFeedItems && cachedFeedItemsExpiresAt > now) {
+    return cachedFeedItems;
+  }
+
+  const freshItems = await fetchAllNewsFeedItemsUncached();
+  cachedFeedItems = freshItems;
+  cachedFeedItemsExpiresAt = now + FEED_CACHE_TTL_MS;
+
+  return freshItems;
+}
+
 export async function fetchNewsFeedItemById(id: string) {
   const items = await fetchAllNewsFeedItems();
-  return items.find((item) => item.id === id) ?? null;
+  return findNewsFeedItemByRouteId(items, id);
+}
+
+export function findNewsFeedItemByRouteId(items: NewsFeedItem[], id: string) {
+  const exact = items.find((item) => item.id === id);
+
+  if (exact) {
+    return exact;
+  }
+
+  return (
+    items.find((item) => {
+      const candidates = buildCandidateIds(item);
+      return candidates.has(id);
+    }) ?? null
+  );
 }
 
 export function getRelatedNewsItems(
