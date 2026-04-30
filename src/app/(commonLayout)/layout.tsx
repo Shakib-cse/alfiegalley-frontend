@@ -1,6 +1,9 @@
-
 import Footer from "@/components/commonLayouts/Footer";
 import Header from "@/components/commonLayouts/Header";
+import {
+  MiniRadioPlayer,
+  RadioPlayerProvider,
+} from "@/components/commonLayouts/RadioPlayerProvider";
 import React from "react";
 
 export default function CommonLayout({
@@ -9,10 +12,11 @@ export default function CommonLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-    <Header />
+    <RadioPlayerProvider>
+      <Header />
       {children}
       <Footer />
-    </>
+      <MiniRadioPlayer />
+    </RadioPlayerProvider>
   );
 }
