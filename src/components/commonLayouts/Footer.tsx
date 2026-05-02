@@ -13,8 +13,8 @@ import {
 const quickLinks = [
   { name: "Home", href: "/" },
   { name: "News", href: "/news" },
-  { name: "About Us", href: "/about" },
-  { name: "Get In Touch", href: "/contact" },
+  { name: "About Us", href: "/about-us" },
+  { name: "Get In Touch", href: "/get-in-touch" },
 ];
 
 const connect = [
