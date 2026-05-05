@@ -11,7 +11,13 @@ import { useRadioPlayer } from "./RadioPlayerProvider";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { isPlaying, togglePlayback } = useRadioPlayer();
+  const {
+    isPlaying,
+    togglePlayback,
+    setSuppressMini,
+    showEmbed,
+    setShowEmbed,
+  } = useRadioPlayer();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -64,7 +70,10 @@ const Header = () => {
         {/* Right Button */}
         <div className="hidden lg:flex">
           <Button
-            onClick={togglePlayback}
+            onClick={() => {
+              setShowEmbed(true);
+              setSuppressMini(true);
+            }}
             className="bg-primary hover:bg-primary/90 text-background rounded-xl px-5 xl:px-6 py-4 xl:py-5 flex items-center gap-2 text-sm"
           >
             {isPlaying ? (
@@ -132,7 +141,10 @@ const Header = () => {
 
           {/* Button */}
           <Button
-            onClick={togglePlayback}
+            onClick={() => {
+              setShowEmbed(true);
+              setSuppressMini(true);
+            }}
             className="bg-primary text-background rounded-full px-8 py-5 flex items-center gap-2 text-base cursor-pointer"
           >
             {isPlaying ? (
@@ -144,6 +156,32 @@ const Header = () => {
           </Button>
         </div>
       </div>
+
+      {/* Floating embed player for Listen Live */}
+      {showEmbed && (
+        <div className="fixed bottom-4 right-4 z-50 rounded-2xl shadow-2xl overflow-hidden border border-border bg-background">
+          <div className="relative">
+            <button
+              onClick={() => {
+                setShowEmbed(false);
+                setSuppressMini(false);
+              }}
+              className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-black/60 hover:bg-black/80 text-white"
+              aria-label="Close player"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <iframe
+              title="Live Player"
+              src="https://live365.com/embeds/v1/player/a03806?s=md&m=dark&c=aac"
+              width="450"
+              height="316"
+              frameBorder={0}
+              allow="autoplay; encrypted-media"
+            />
+          </div>
+        </div>
+      )}
     </header>
   );
 };

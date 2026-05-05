@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Newspaper, Pause, Play } from "lucide-react";
-import { useRadioPlayer } from "./RadioPlayerProvider";
 import Link from "next/link";
+import { useRadioPlayer } from "./RadioPlayerProvider";
 
 export default function HeroBanner() {
   const { isPlaying, togglePlayback } = useRadioPlayer();
