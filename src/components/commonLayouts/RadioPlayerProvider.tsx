@@ -21,6 +21,10 @@ type RadioPlayerContextValue = {
   hasActivated: boolean;
   streamUrl: string;
   togglePlayback: () => Promise<void>;
+  suppressMini: boolean;
+  setSuppressMini: (v: boolean) => void;
+  showEmbed: boolean;
+  setShowEmbed: (v: boolean) => void;
 };
 
 const RadioPlayerContext = createContext<RadioPlayerContextValue | null>(null);
@@ -38,33 +42,16 @@ export function RadioPlayerProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [status, setStatus] = useState<RadioStatus>("idle");
   const [hasActivated, setHasActivated] = useState(false);
+  const [suppressMini, setSuppressMini] = useState(false);
+  const [showEmbed, setShowEmbed] = useState(false);
 
   const togglePlayback = useCallback(async () => {
-    const audio = audioRef.current;
-
-    if (!audio) {
-      return;
-    }
-
-    if (isPlaying) {
-      audio.pause();
-      setStatus("idle");
-      return;
-    }
-
-    try {
-      setStatus("loading");
-      await audio.play();
-      setHasActivated(true);
-      setStatus("playing");
-    } catch {
-      setStatus("error");
-    }
-  }, [isPlaying]);
+    // Instead of playing an in-document audio element, open the global embed iframe.
+    setShowEmbed(true);
+  }, []);
 
   const value = useMemo<RadioPlayerContextValue>(
     () => ({
@@ -73,31 +60,27 @@ export function RadioPlayerProvider({
       hasActivated,
       streamUrl: LIVE_STREAM_URL,
       togglePlayback,
+      suppressMini,
+      setSuppressMini,
+      showEmbed,
+      setShowEmbed,
     }),
-    [hasActivated, isPlaying, status, togglePlayback],
+    [
+      hasActivated,
+      isPlaying,
+      status,
+      togglePlayback,
+      suppressMini,
+      setSuppressMini,
+      showEmbed,
+      setShowEmbed,
+    ],
   );
 
   return (
     <RadioPlayerContext.Provider value={value}>
       {children}
-      <audio
-        ref={audioRef}
-        src={LIVE_STREAM_URL}
-        preload="none"
-        onPlay={() => {
-          setIsPlaying(true);
-          setStatus("playing");
-          setHasActivated(true);
-        }}
-        onPause={() => {
-          setIsPlaying(false);
-          setStatus("idle");
-        }}
-        onError={() => {
-          setIsPlaying(false);
-          setStatus("error");
-        }}
-      />
+      {/* audio element removed: iframe embed handles playback per product requirement */}
     </RadioPlayerContext.Provider>
   );
 }
@@ -113,8 +96,14 @@ export function useRadioPlayer() {
 }
 
 export function MiniRadioPlayer() {
-  const { hasActivated, isPlaying, status, streamUrl, togglePlayback } =
-    useRadioPlayer();
+  const {
+    hasActivated,
+    isPlaying,
+    status,
+    streamUrl,
+    togglePlayback,
+    suppressMini,
+  } = useRadioPlayer();
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const [isEntered, setIsEntered] = useState(false);
@@ -178,7 +167,7 @@ export function MiniRadioPlayer() {
     };
   }, [hasActivated, isPlaying, status]);
 
-  if (!hasActivated || !shouldRender) {
+  if (!hasActivated || !shouldRender || suppressMini) {
     return null;
   }
 

@@ -31,6 +31,8 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
 
 # Expose port (Next.js default is 3000)
 EXPOSE 3000
@@ -38,5 +40,5 @@ EXPOSE 3000
 # Set environment to production
 ENV NODE_ENV=production
 
-# Start the app
-CMD ["bun", "run", "start"]
+# Start the app via entrypoint which loads env file if present
+ENTRYPOINT ["sh", "/app/docker-entrypoint.sh"]

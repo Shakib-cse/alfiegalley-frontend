@@ -4,17 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import {
+  FaEnvelope,
   FaFacebook,
   FaInstagram,
   FaLinkedin,
   FaLongArrowAltRight,
+  FaMapMarkerAlt,
+  FaPhone,
 } from "react-icons/fa";
 
 const quickLinks = [
   { name: "Home", href: "/" },
   { name: "News", href: "/news" },
-  { name: "About Us", href: "/about" },
-  { name: "Get In Touch", href: "/contact" },
+  { name: "About Us", href: "/about-us" },
+  { name: "Get In Touch", href: "/get-in-touch" },
 ];
 
 const connect = [
@@ -103,30 +106,35 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Stay Updated */}
+          {/* Contact */}
           <div className="flex flex-col items-center md:items-start">
-            <h3 className="text-lg font-medium mb-4">Stay Updated</h3>
-            <p className="text-sm text-ring mb-4">
-              Get the latest news and special offers
-            </p>
-            <form onSubmit={handleSubscribe} className="w-full">
-              <div className="flex">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email"
-                  className="flex-1 px-4 py-3 rounded-l-lg bg-gray-700 text-background placeholder-gray-400 text-sm focus:outline-none focus:ring-0"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 rounded-r-lg bg-primary text-background text-2xl hover:bg-primary/90 transition-colors focus:outline-none focus:ring-0"
-                >
-                  <FaLongArrowAltRight />
-                </button>
-              </div>
-            </form>
+            <h3 className="text-lg font-medium mb-4">Contact</h3>
+
+            <ul className="flex flex-col gap-4 text-sm text-ring">
+              {/* Email */}
+              <li className="flex items-center gap-3">
+                <div className="flex items-center justify-center rounded-full text-primary">
+                  <FaEnvelope />
+                </div>
+                <span>alfie@essexestuaryradio.co.uk</span>
+              </li>
+
+              {/* Phone */}
+              <li className="flex items-center gap-3">
+                <div className="flex items-center justify-center rounded-full text-primary">
+                  <FaPhone />
+                </div>
+                <span>+1 555-987-6543</span>
+              </li>
+
+              {/* Location */}
+              <li className="flex items-center gap-3">
+                <div className="flex items-center justify-center rounded-full text-primary">
+                  <FaMapMarkerAlt />
+                </div>
+                <span>Florida, USA</span>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -139,23 +147,6 @@ const Footer = () => {
             © {new Date().getFullYear()} Essex Estuary Radio. All rights
             reserved | hello@essex.com
           </p>
-
-          {/* Right: Links */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-            <Link
-              href="/terms"
-              className="text-sm font-semibold text-background/70 hover:text-background transition-colors"
-            >
-              Terms & conditions
-            </Link>
-            <span className="hidden sm:block text-muted-foreground">|</span>
-            <Link
-              href="/privacy"
-              className="text-sm font-semibold text-background/70 hover:text-background transition-colors"
-            >
-              Privacy Policy
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
